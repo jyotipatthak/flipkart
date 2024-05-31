@@ -4,11 +4,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const images = [
-  "./src/assets/a.webp",
-  "./src/assets/b.webp",
-  "./src/assets/c.webp",
-  "./src/assets/d.webp",
-  "./src/assets/e.jpg",
+  "/a.webp",
+  "/b.webp",
+  "/c.webp",
+  "/d.webp",
+  "/e.jpg",
 ];
 
 const ImageCarousel = () => {

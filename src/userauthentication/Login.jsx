@@ -1,100 +1,251 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
-import { collection, onSnapshot, query } from "firebase/firestore";
-import { db } from "../../firebase";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
-
+import "react-toastify/dist/ReactToastify.css";
+import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, fetchSignInMethodsForEmail, EmailAuthProvider } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { auth } from "../../firebase"; // Import the initialized auth
+import { login } from "../redux/actions";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-  const [users, setUsers] = useState([]);
+  const googleProvider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  useEffect(() => {
-    const q = query(collection(db, "user"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      let userArray = [];
-      querySnapshot.forEach((doc) => {
-        userArray.push({ ...doc.data(), id: doc.id });
-      });
-      console.log("Fetched users:", userArray); // Log fetched users
-      setUsers(userArray);
-    });
+  const dispatch = useDispatch();
 
-    return () => unsubscribe();
-  }, []);
+  const handleLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    checkUserCredentials();
-  };
+      console.log("User Credential:", userCredential); // Add this line to check userCredential
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+      // Logged in
+      const user = userCredential.user;
+      const token = await user.getIdToken();
+      console.log(user);
 
-  const checkUserCredentials = () => {
-    const user = users.find(user => 
-      user.user.email === formData.email && user.user.password === formData.password
-    );
+      // Dispatch the login action with the token
+      dispatch(login(token));
 
-    if (user) {
-      toast.success('User logged in successfully', {
-        position: 'bottom-right',
-        autoClose: 5000,
-        theme: 'dark'
-      });
-      localStorage.setItem("user", JSON.stringify(user));
       navigate("/");
-    } else {
-      toast.error('Invalid Credentials', {
-        position: 'top-right',
-        autoClose: 5000
+      toast.success("User logged in successfully", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
       });
-      console.log("Invalid credentials for:", formData); // Log invalid credentials
+    } catch (error) {
+      toast.error(`Error in logging in the user: ${error.message}`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      console.error("Error logging in user", error);
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const token = await user.getIdToken();
+      console.log(user);
+
+      // Dispatch the login action with the token
+      dispatch(login(token));
+
+      navigate("/");
+      toast.success("User logged in with Google successfully", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      toast.error(`Error in logging in with Google: ${error.message}`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      console.error("Error logging in with Google", error);
+    }
+  };
+
+  const handleGithubLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, githubProvider);
+      const user = result.user;
+      const token = await user.getIdToken();
+      console.log(user);
+
+      // Dispatch the login action with the token
+      dispatch(login(token));
+
+      navigate("/");
+      toast.success("User logged in with GitHub successfully", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        const existingEmail = error.customData.email;
+        const pendingCred = GithubAuthProvider.credentialFromError(error);
+
+        const providers = await fetchSignInMethodsForEmail(auth, existingEmail);
+        if (providers.includes(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+          // Prompt user to login with email and password
+          // After they login, link the accounts
+          const password = prompt('Please enter your password to link GitHub with your existing account');
+          const userCredential = await signInWithEmailAndPassword(auth, existingEmail, password);
+          await userCredential.user.linkWithCredential(pendingCred);
+          const token = await userCredential.user.getIdToken();
+          dispatch(login(token));
+          navigate("/");
+          toast.success("User logged in with GitHub and linked with existing account successfully", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+      } else {
+        toast.error(`Error in logging in with GitHub: ${error.message}`, {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        console.error("Error logging in with GitHub", error);
+      }
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleLogin();
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   return (
-    <div className="p-8 flex items-center justify-center mt-8 bg-gray-100">
-      <div className="bg-white min-h-screen shadow-md rounded-lg overflow-hidden flex m-8 max-w-4xl w-full">
+    <div className="min-h-screen flex items-center mt-16 justify-center bg-gray-100">
+      <div className="bg-white h-screen shadow-md rounded-lg overflow-hidden flex m-8 max-w-4xl w-full">
         <div className="w-2/5 bg-blue-500 text-white p-8 flex flex-col">
-          <h2 className="text-2xl tracking-wider text-left font-semibold mb-4">Login</h2>
-          <p className="text-lg mb-8 tracking-wider text-left">Get access to your order Wishlist and Recommendations</p>
+          <h2 className="text-2xl tracking-wider text-left font-semibold mb-4">
+            Welcome Back!
+          </h2>
+          <p className="text-lg mb-8 tracking-wider text-left">
+            Log in with your Email to continue
+          </p>
         </div>
         <div className="w-1/2 p-8">
           <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm text-left font-semibold text-gray-600">Enter your Email</label>
+              <h2 className="text-2xl tracking-wider text-left font-semibold mb-4">
+                Log in
+              </h2>
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="email"
+                className="block text-sm text-left font-semibold text-gray-600"
+              >
+                Enter your Email
+              </label>
               <input
-                type="email"
-                name="email"
+                labelText={"Email ID"}
+                inputPlaceholder={"Tell us your email id"}
+                inputType={"email"}
+                required={true}
                 value={formData.email}
                 onChange={handleInputChange}
-                className="mt-1 p-2 block w-full border-b-2 border-x-0 border-t-0"
-                placeholder="Enter Email ID / Username"
+                name="email"
+                className="mt-1 p-2 block w-full border-red-600 border-b-2 border-x-0 border-t-0"
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="password" className="block text-sm text-left font-semibold text-gray-600">Enter your Password</label>
-              <input
-                type="password"
-                name="password"
+              <label
+                htmlFor="password"
+                className="block text-sm text-left font-semibold text-gray-600"
+              >
+                Enter your Password
+              </label>
+              <input 
+                labelText={"Password"}
+                inputPlaceholder={"(Minimum 6 characters)"}
+                inputType={"password"}
+                required={true}
                 value={formData.password}
                 onChange={handleInputChange}
-                className="mt-1 p-2 block w-full border-b-2 border-x-0 border-t-0"
-                placeholder="Enter Password"
+                name="password"
+                className="mt-1 p-2 block w-full border-red-600 border-b-2 border-x-0 border-t-0"
               />
             </div>
-            <button type="submit" className="bg-orange-500 text-white py-2 rounded-md font-semibold">CONTINUE</button>
+            <button
+              type="submit"
+              className="bg-orange-500 text-white py-2 rounded-md font-semibold"
+            >
+              CONTINUE
+            </button>
           </form>
           <div className="mt-4 text-center container hover:bg-white py-3 bg-white border-x-2 border-b-2 px-8">
-            <Link to="/signup" className="text-blue-500">New User? Sign up</Link>
+            <button onClick={handleGoogleLogin} className="text-blue-500">
+              Sign in with Google
+            </button>
+          </div>
+          <div className="mt-4 text-center container hover:bg-white py-3 bg-white border-x-2 border-b-2 px-8">
+            <button onClick={handleGithubLogin} className="text-blue-500">
+              Sign in with GitHub
+            </button>
+          </div>
+          <div className="mt-4 text-center container hover:bg-white py-3 bg-white border-x-2 border-b-2 px-8">
+            <Link to="/signup" className="text-blue-500">
+              New user? Sign up
+            </Link>
           </div>
         </div>
       </div>

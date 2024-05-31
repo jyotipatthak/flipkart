@@ -6,16 +6,16 @@ import { FaGithub } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, removeItemFromCart } from './redux/actions';
+import Footer from './Footer';
 
 const ProductModal = ({ product, onClose }) => {
 
   if (!product) return null;
 
-  const cart = useSelector(state => state.cart);
-  const dispatch = useDispatch();
+  
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center   bg-black bg-opacity-50">
       <div className="bg-white p-4 rounded-lg max-w-md w-full relative">
         <button onClick={onClose} className="absolute top-2 right-2 text-black">Close</button>
         <img className="w-full mb-2 h-60" src={product.image} alt={product.title} />
@@ -23,17 +23,7 @@ const ProductModal = ({ product, onClose }) => {
         <p className="text-md mb-2">{product.description}</p>
         <p className="text-md font-bold mb-2">Price: ${product.price}</p>
 
-        {
-          product.id in cart ?
-            <button className="hover:bg-black bg-[#35383b] text-white font-serif py-1 px-2 ml-2 mt-4 rounded-xl" onClick={() => handleRemoveFromCart(product.id)}>
-              Remove Item
-            </button>
-            :
-            <button className="hover:bg-black bg-[#35383b] text-white font-serif py-1 px-2 ml-2 mt-4 rounded-xl" onClick={() => handleAddToCart(product)}>
-              Add to Cart
-            </button>
-
-        }
+       
       </div>
     </div>
   );
@@ -101,7 +91,8 @@ function Product() {
   };
 
   const handleSearch = (title) => {
-    fetchProducts(null, title);
+    const filtered = products.filter(product => product.title.toLowerCase().includes(title.toLowerCase()));
+    setFilteredProducts(filtered);
   };
 
   const handlePriceFilter = (minPrice, maxPrice) => {
@@ -153,12 +144,12 @@ function Product() {
                 ))}
               </div>
             </nav>
-      <div className="mt-4 ">
+      <div className="mt-4">
       <PriceFilter onFilter={handlePriceFilter} /> 
-        <div className=" mt-4 gap-8 flex ml-14">
+        <div className=" mt-4 gap-4 flex ml-14">
          
-        <Search  onClick={() => handleSearch(title)}    />
-        <a href="#" className="text-blue-900 py-2 ml-96 text-4xl">
+       <Search onSearch={handleSearch} />
+        <a href="#" className="text-blue-900 py-2 ml-90 text-4xl">
                   <FaGithub />
                 </a>
                 <a href="#" className="text-blue-900 py-2  text-4xl">
@@ -169,7 +160,7 @@ function Product() {
                 </a>
         </div>
         
-        <div className="flex- grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 lg:pr-0 ">
+        <div className="flex- grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 lg:pr-0 mx-10">
           {isLoading ? (
             <p>Loading...</p>
           ) : (
@@ -185,7 +176,7 @@ function Product() {
                   <h3 className="text-sm font-cambria text-black mb-2">{product.title}</h3>
                   <p className="text-md font-bold text-black mb-2">
                     Price: ${product.price}
-                    Price: ${product.price}
+                  
                     {
                       product.id in cart ?
                         <button className="hover:bg-black bg-[#181443] text-white font-serif py-1 px-2 ml-2 mt-4 rounded-xl" onClick={() => handleRemoveFromCart(product.id)}>
@@ -206,6 +197,9 @@ function Product() {
       </div>
       {error && <p className="text-red-500 text-center">{error}</p>}
       {isModalOpen && <ProductModal product={selectedProduct} onClose={handleCloseModal} />}
+      <div className='mx-10'>
+      <Footer />
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { ADD_TO_CART, UPDATE_CART, REMOVE_FROM_CART, LOGIN, LOGOUT } from './typ
 
 
 export const login = (token) => (dispatch) => {
+  console.log(token);
   dispatch({ type: LOGIN, payload: token });
 };
 

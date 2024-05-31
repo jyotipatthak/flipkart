@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import Search from './Searchbar';
+
 
 const PriceFilter = ({ onFilter }) => {
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(25000);
+  const [maxPrice, setMaxPrice] = useState(1000);
 
   const handleSliderChange = (value) => {
     setMinPrice(value[0]);
@@ -29,9 +29,9 @@ const PriceFilter = ({ onFilter }) => {
   };
 
   return (
-    <div className="flex  w-full bg-blue-950 text-white gap-10 rounded-xl ">
-      <h2 className="text-xl flex  text-center  p-4">Price</h2>
-      <div className="mt-6 w-96  flex">
+    <div className="flex flex-col md:flex-row items-center bg-blue-950 text-white gap-4 p-4 rounded-xl mx-10 shadow-lg">
+      <h2 className="text-xl md:text-2xl text-center md:text-left p-2 md:p-4 font-semibold">Filter by Price</h2>
+      <div className="w-full md:w-96 flex flex-col items-center">
         <Slider
           range
           min={0}
@@ -39,10 +39,15 @@ const PriceFilter = ({ onFilter }) => {
           step={10}
           value={[minPrice, maxPrice]}
           onChange={handleSliderChange}
-          className="text-blue-700"
+          trackStyle={[{ backgroundColor: '#2563eb' }]}
+          handleStyle={[
+            { borderColor: '#2563eb' },
+            { borderColor: '#2563eb' }
+          ]}
+          railStyle={{ backgroundColor: '#3b82f6' }}
         />
       </div>
-      <div className="flex items-center  m-4">
+      <div className="flex items-center mt-4 md:mt-0 space-x-2">
         <select
           value={minPrice}
           onChange={handleMinPriceChange}
@@ -72,7 +77,6 @@ const PriceFilter = ({ onFilter }) => {
         >
           Apply
         </button>
-        
       </div>
     </div>
   );
