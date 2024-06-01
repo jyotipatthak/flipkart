@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import PriceFilter from './pricefilter';
-import Search from './Searchbar';
-import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
+import PriceFilter from '../filters/pricefilter';
+import Search from '../ui/Searchbar';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItemToCart, removeItemFromCart } from './redux/actions';
-import Footer from './Footer';
+import { addItemToCart, removeItemFromCart } from '../redux/actions';
+import Footer from '../ui/Footer';
+import Toast from '../ui/Toast';
+
 
 const ProductModal = ({ product, onClose }) => {
   if (!product) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg max-w-lg w-full relative shadow-lg">
-        <button onClick={onClose} className="absolute top-3 right-3 text-gray-600 hover:text-gray-800">✖</button>
+      <div className="bg-white p-6 rounded-lg max-w-lg w-full relative shadow-lg animate-fadeIn">
+        <button onClick={onClose} className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 focus:outline-none">
+          ✖
+        </button>
         <img className="w-full h-64 object-cover mb-4 rounded-lg" src={product.image} alt={product.title} />
         <h3 className="text-2xl font-bold mb-3">{product.title}</h3>
         <p className="text-gray-700 mb-4">{product.description}</p>
@@ -108,20 +111,22 @@ function Product() {
 
   const handleAddToCart = (product) => {
     dispatch(addItemToCart(product));
+    Toast.success(`${product.title} added to cart`);
   };
 
   const handleRemoveFromCart = (productId) => {
     dispatch(removeItemFromCart(productId));
+    Toast.info(`Item removed from cart`);
   };
 
   return (
     <div className="min-h-screen flex flex-col mt-20">
-      <nav className="bg-blue-700 text-white py-2">
-        <div className="container mx-auto flex flex-wrap gap-4 justify-center md:justify-start overflow-x-auto p-2 space-x-4">
+      <nav className="bg-blue-700 text-white py-2 sticky top-0 z-10">
+        <div className="container mx-auto flex flex-wrap gap-4 justify-center p-2 space-x-4">
           {categories.map((category, index) => (
             <div key={index} className="flex-shrink-0">
               <p
-                className={`text-lg font-semibold cursor-pointer px-4 py-2 rounded-lg transition-colors ${
+                className={`text-lg font-semibold cursor-pointer px-4  rounded-lg transition-colors ${
                   category === selectedCategory ? 'bg-[#1a2259] text-white' : 'bg-white text-blue-700 hover:bg-blue-200'
                 }`}
                 onClick={() => handleCategoryClick(category)}
@@ -132,18 +137,19 @@ function Product() {
           ))}
         </div>
       </nav>
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between mt-4 px-4">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-center mt-4 px-4">
         <PriceFilter onFilter={handlePriceFilter} />
         <Search onSearch={handleSearch} />
-      
       </div>
       <div className="flex flex-wrap justify-center mt-6 gap-6 px-4">
         {isLoading ? (
-          <p>Loading...</p>
+          <div className="flex justify-center items-center w-full h-full">
+            <div className="w-10 h-10 border-4 border-t-4 border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
         ) : (
           filteredProducts.map((product) => (
             <div key={product.id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2">
-              <div className="bg-white border rounded-lg shadow-lg p-4 flex flex-col items-center">
+              <div className="bg-white border rounded-lg shadow-lg p-4 flex flex-col items-center transition-transform transform hover:scale-105">
                 <img
                   className="w-full h-60 object-cover mb-4 rounded cursor-pointer"
                   src={product.image}
@@ -152,16 +158,16 @@ function Product() {
                 />
                 <h3 className="text-md font-bold text-gray-800 mb-2">{product.title}</h3>
                 <p className="text-lg font-semibold text-gray-900 mb-4">Price: ${product.price}</p>
-                {product.id in cart ? (
+                {cart.some(cartItem => cartItem.id === product.id) ? (
                   <button
-                    className="bg-blue-900 text-white px-4 py-1 rounded-lg hover:bg-blue-900 transition"
+                    className="bg-blue-900 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
                     onClick={() => handleRemoveFromCart(product.id)}
                   >
                     Remove Item
                   </button>
                 ) : (
                   <button
-                    className="bg-blue-500 text-white px-4 py-1 rounded-lg hover:bg-blue-600 transition"
+                    className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition"
                     onClick={() => handleAddToCart(product)}
                   >
                     Add to Cart

@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="flex flex-wrap -mx-8">
             <div className="w-full md:w-1/4 px-4 mb-8 md:mb-0">
               <div className="flex">
-                <img src='./src/assets/flip.jpg' alt='error' className='h-16 w-20'></img>
+                <img src='/flip.jpg' alt='error' className='h-10 w-20'></img>
               </div>
               
               <p className="text-white text-left w-[90%]">

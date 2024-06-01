@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import ImageCarousel from "./Carousel";
-import Footer from "./Footer";
-import Disclaimer from "./desc";
-import Trending from "./trending";
-import CategoryProducts from "./categoryProducts";
-import CategoryMenu from "./CategoryMenu";
+import ImageCarousel from "../filters/Carousel";
+import Footer from "../ui/Footer";
+import Disclaimer from "../ui/desc";
+import Trending from "./shopNow";
+import CategoryMenu from "../ui/CategoryMenu";
+import CategoryProducts from "../filters/categoryProducts";
 
 const HeroHome = () => {
   const [categories, setCategories] = useState([]);

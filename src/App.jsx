@@ -1,20 +1,18 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-import SignUp from './userauthentication/Signup'
+import SignUp from './userauthentication/Signup';
  import Login from './userauthentication/Login';
-import Navbar from './Navbar';
-
-import HeroHome from './HeroHome';
-import Product from './products';
-import Cart from './Cart';
+import HeroHome from './components/HeroHome';
+import Product from './components/products';
+import Cart from './components/Cart';
+import Navbar from './components/Navbar';
 
 function App() {
 
   return (
     <BrowserRouter>
-      <Navbar /> 
+      <Navbar />
       
       <ToastContainer
         position="bottom-right"

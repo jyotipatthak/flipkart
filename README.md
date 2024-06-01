@@ -10,7 +10,13 @@ Cart Management: Users can view and manage the items in their cart before making
 ## Main pages of the project
 
 # Home page
-![Home page](./src/assets/home1.jpg)
+![Home page](./src/assets/homepage.jpg)
+
+# homepage
+![category](./src/assets/homepage.jpg)
+
+# Home page
+![shopNow ](./src/assets/shopNow.jpg)
 
 # products
 ![products page](./src/assets/product.jpg)
@@ -24,8 +30,8 @@ Cart Management: Users can view and manage the items in their cart before making
 # Login
 ![Login](./src/assets/login.jpg)
 
-# After Login
-![After login](./src/assets/profile.jpg)
+# why choose us
+![about](./src/assets/about.jpg)
 
 # Footer
 ![Footer](./src/assets/footer.jpg)
@@ -37,7 +43,8 @@ Cart Management: Users can view and manage the items in their cart before making
 3. [src/components]  in this file all the dependency are their .
 4. [src/ui] here the ui of about ,searchbar,footer are availbale.
 5. [src/Redux] redux file are available here
-6. [src/utils] services of API  is available here.
+6. [src/filter] services of API  is available here.
+7. [src/firebase] firebase connection file is available here.
 
 
 ## 🌐 `Languages and Tools used`
@@ -46,7 +53,7 @@ Cart Management: Users can view and manage the items in their cart before making
   - React-Router:- for Routing go to different pages
   - Tailwind Css:- Utility Css frameWork which used for styling the webapge of the wishWebApp and make responsive Project.
   - React icons: we use react-icons because for icons.
-  -Authentication : firebase authentication 
+  - Authentication : firebase authentication 
 
 
 ## 🔧 `Project Clonning and Running`
@@ -74,7 +81,7 @@ Cart Management: Users can view and manage the items in their cart before making
 
 **Link of gitgub page** : https://github.com/jyotipatthak/flipkart
 
-**Link to wish web app video**: 
+**Link to wish web app video**: https://youtu.be/MKEkv8dHDyA?si=jMhwehTvKdMSc9ms
 
 **Web Deployed Link**: https://flipkart-eight-eta.vercel.app/ 
 

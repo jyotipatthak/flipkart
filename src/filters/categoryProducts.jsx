@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItemToCart, removeItemFromCart, updateItemQuantityInCart } from './redux/actions';
+import { addItemToCart, removeItemFromCart, updateItemQuantityInCart } from '../redux/actions';
 import { FaTrash } from 'react-icons/fa';
 
 const CategoryProducts = ({ category }) => {
@@ -62,14 +62,14 @@ const CategoryProducts = ({ category }) => {
         <div className="flex gap-2 items-center">
           <button 
             onClick={handlePrevProduct} 
-            className={`text-2xl sm:text-3xl p-1 bg-green-500 rounded-lg font-bold px-2 ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`text-lg sm:text-3xl   rounded-lg font-bold border-2 border-blue-700 px-2  ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={currentIndex === 0}
           >
             &lt;
           </button>
           <button 
             onClick={handleNextProduct} 
-            className={`text-2xl sm:text-3xl font-bold rounded-lg p-1 bg-indigo-700 px-2 ${currentIndex + 4 >= products.length ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`text-lg sm:text-3xl font-bold rounded-lg  border-2 border-blue-700  px-2 ${currentIndex + 4 >= products.length ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={currentIndex + 4 >= products.length}
           >
             &gt;

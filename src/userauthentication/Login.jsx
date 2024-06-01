@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Toast from "../ui/Toast";
 import { Link, useNavigate } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
@@ -44,27 +43,9 @@ const Login = () => {
       dispatch(login(token));
 
       navigate("/");
-      toast.success("User logged in successfully", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      Toast.success("User logged in successfully");
     } catch (error) {
-      toast.error(`Error in logging in the user: ${error.message}`, {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      Toast.error(`Error in logging in the user: ${error.message}`);
       console.error("Error logging in user", error);
     }
   };
@@ -80,28 +61,10 @@ const Login = () => {
       dispatch(login(token));
 
       navigate("/");
-      toast.success("User logged in with Google successfully", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      Toast.success("User logged in with Google successfully");
     } catch (error) {
-      toast.error(`Error in logging in with Google: ${error.message}`, {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-      console.error("Error logging in with Google", error);
+      console.error("Google Login Error", error);
+      Toast.error(`Error in logging in with Google: ${error.message}`);
     }
   };
 
@@ -116,16 +79,7 @@ const Login = () => {
       dispatch(login(token));
 
       navigate("/");
-      toast.success("User logged in with GitHub successfully", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      Toast.success("User logged in with GitHub successfully");
     } catch (error) {
       if (error.code === "auth/account-exists-with-different-credential") {
         const existingEmail = error.customData.email;
@@ -133,45 +87,35 @@ const Login = () => {
 
         const providers = await fetchSignInMethodsForEmail(auth, existingEmail);
         if (providers.includes(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
-          // Prompt user to login with email and password
-          // After they login, link the accounts
           const password = prompt(
             "Please enter your password to link GitHub with your existing account"
           );
-          const userCredential = await signInWithEmailAndPassword(
-            auth,
-            existingEmail,
-            password
-          );
-          await userCredential.user.linkWithCredential(pendingCred);
-          const token = await userCredential.user.getIdToken();
-          dispatch(login(token));
-          navigate("/");
-          toast.success(
-            "User logged in with GitHub and linked with existing account successfully",
-            {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
+          if (password) {
+            try {
+              const userCredential = await signInWithEmailAndPassword(
+                auth,
+                existingEmail,
+                password
+              );
+              await userCredential.user.linkWithCredential(pendingCred);
+              const token = await userCredential.user.getIdToken();
+              dispatch(login(token));
+              navigate("/");
+              Toast.success(
+                "User logged in with GitHub and linked with existing account successfully"
+              );
+            } catch (linkError) {
+              Toast.error(`Error linking accounts: ${linkError.message}`);
+              console.error("Error linking accounts", linkError);
             }
-          );
+          } else {
+            Toast.error("Password is required to link accounts");
+          }
+        } else {
+          Toast.error("Email is already associated with another provider");
         }
       } else {
-        toast.error(`Error in logging in with GitHub: ${error.message}`, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        Toast.error(`Error in logging in with GitHub: ${error.message}`);
         console.error("Error logging in with GitHub", error);
       }
     }
@@ -244,7 +188,7 @@ const Login = () => {
               CONTINUE
             </button>
           </form>
-          <div className="mt-4">
+          <div className="mt-4 text-center">
             <button
               onClick={handleGoogleLogin}
               className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-blue-600 flex items-center justify-center"
@@ -260,31 +204,33 @@ const Login = () => {
                 />
                 <path
                   fill="#FBBC05"
-                  d="M10.5 28.2c-1-2.5-1.5-5.2-1.5-8s.5-5.5 1.5-8l-7.5-5.8C1.8 10.9 0 17.2 0 24s1.8 13.1 4.5 18.6l7.5-5.8z"
+                  d="M10.5 28.2c-1-2.5-1.5-5.3-1.5-8.2s.5-5.7 1.5-8.2l-7.5-5.8C1.5 10.3 0 16 0 24s1.5 13.7 4.5 18.8l7.5-5.8z"
                 />
                 <path
                   fill="#EA4335"
-                  d="M24 48c6.5 0 12-2.1 16.1-5.7l-7.5-5.8c-2.1 1.4-4.8 2.3-7.7 2.3-6.2 0-11.5-4.2-13.4-10l-7.5 5.8C6.8 42.2 14.7 48 24 48z"
+                  d="M24 48c6.5 0 12-2.1 16.1-5.7l-7.5-5.8c-2.1 1.4-4.8 2.2-7.6 2.2-6.5 0-12-4.4-13.9-10.4l-7.5 5.8C6.8 42.2 14.7 48 24 48z"
                 />
               </svg>
-              Sign in with Google
+              Continue with Google
             </button>
             <button
               onClick={handleGithubLogin}
-              className="w-full bg-gray-900 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-gray-800 flex items-center justify-center"
+              className="w-full bg-gray-800 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-gray-900 flex items-center justify-center"
             >
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M12 0C5.37 0 0 5.373 0 12c0 5.304 3.438 9.8 8.205 11.385.6.111.82-.261.82-.579 0-.285-.011-1.04-.017-2.04-3.338.724-4.042-1.614-4.042-1.614C4.422 17.544 3.633 17.2 3.633 17.2c-1.087-.744.082-.729.082-.729 1.202.084 1.836 1.235 1.836 1.235 1.07 1.832 2.807 1.303 3.492.997.108-.775.419-1.303.762-1.602-2.665-.302-5.467-1.334-5.467-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23.957-.267 1.984-.4 3.004-.404 1.02.004 2.047.137 3.004.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77.84 1.236 1.911 1.236 3.221 0 4.609-2.805 5.625-5.475 5.922.43.371.814 1.102.814 2.222 0 1.606-.015 2.896-.015 3.291 0 .321.217.694.825.576C20.565 21.796 24 17.302 24 12c0-6.627-5.373-12-12-12z"
-                />
+              <svg
+                className="w-5 h-5 mr-2"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.112.82-.262.82-.58v-2.157c-3.338.725-4.04-1.415-4.04-1.415-.546-1.387-1.334-1.757-1.334-1.757-1.088-.744.083-.729.083-.729 1.203.084 1.836 1.235 1.836 1.235 1.07 1.833 2.806 1.303 3.492.995.108-.774.42-1.304.763-1.604-2.665-.305-5.467-1.333-5.467-5.932 0-1.31.468-2.38 1.236-3.22-.124-.304-.536-1.526.116-3.176 0 0 1.008-.322 3.302 1.23.96-.267 1.98-.4 3-.404 1.02.004 2.04.137 3 .404 2.294-1.552 3.3-1.23 3.3-1.23.652 1.65.24 2.872.12 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.805 5.625-5.475 5.922.432.372.816 1.104.816 2.226v3.293c0 .32.216.694.825.576C20.565 21.795 24 17.295 24 12 24 5.37 18.63 0 12 0z" />
               </svg>
-              Sign in with GitHub
+              Continue with GitHub
             </button>
           </div>
-          <div className="mt-4 text-center">
+          <hr className="my-4" />
+          <div className="text-center">
             <Link to="/signup" className="text-blue-500">
-              New user? Sign up
+              Don't have an account? Signup
             </Link>
           </div>
         </div>

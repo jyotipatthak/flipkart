@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart, removeItemFromCart } from "./redux/actions";
+import { addItemToCart,removeItemFromCart } from "../redux/actions";
 
 const ProductModal = ({ product, onClose }) => {
   if (!product) return null;

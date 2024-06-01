@@ -13,6 +13,7 @@ import {
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { auth } from "../../firebase"; // Import the initialized auth
+import Toast from "../ui/Toast";
 
 const SignUp = () => {
   const googleProvider = new GoogleAuthProvider();

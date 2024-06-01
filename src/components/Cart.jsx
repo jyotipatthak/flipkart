@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { removeItemFromCart, updateItemQuantityInCart } from "./redux/actions";
+import { removeItemFromCart, updateItemQuantityInCart } from "../redux/actions";
 import { FaTrash } from "react-icons/fa";
 
 function Cart() {
