@@ -53,7 +53,7 @@ const CategoryMenu = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="flex justify-around mt-16 sm:mt-20 lg:mt-24 p-2">
+    <div className="flex justify-around  sm:mt-20 lg:mt-16 p-2">
       {categories.map((category, index) => (
         <div key={index} className="relative">
           <button
