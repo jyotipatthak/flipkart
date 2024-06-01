@@ -76,13 +76,13 @@ Cart Management: Users can view and manage the items in their cart before making
 
 **Link to wish web app video**: 
 
-**Web Deployed Link**:  
+**Web Deployed Link**: https://flipkart-eight-eta.vercel.app/ 
 
 
 
 ## 🎋 `COLLABORATORS`
 This project is created within a team of two members.
-- [@jyoti pathak](https://github.com/jyotipatthak)]
+- [@jyoti pathak](https://github.com/jyotipatthak)
 
 ##  📚`Feedback`
 

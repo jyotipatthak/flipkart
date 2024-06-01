@@ -22,8 +22,8 @@ function Cart() {
   }, 0);
 
   return (
-    <div className="bg-gray-50 text-gray-800 min-h-screen p-8 sm:p-12 lg:p-16 xl:p-20">
-      <h2 className="text-4xl font-extrabold mb-12 text-center text-gray-900 mt-8 sm:mt-12 lg:mt-16 xl:mt-20">Shopping Cart</h2>
+    <div className="bg-gray-50 text-gray-800 min-h-screen p-8 sm:p-12  xl:p-20">
+      <h2 className="text-4xl font-extrabold mb-12 text-center text-gray-900  sm:mt-12 ">Shopping Cart</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {Object.values(cart).map((item) => {
           let product = item.product;

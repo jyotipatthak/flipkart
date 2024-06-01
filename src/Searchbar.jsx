@@ -20,7 +20,7 @@ const Search = ({ onSearch }) => {
       </span>
       <input
         type="text"
-        className="pl-10 pr-4 py-2 border-blue-900 border-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+        className="pl-10  py-1 border-blue-900 border-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
         placeholder="Search products..."
         value={searchInput}
         onChange={handleChange}

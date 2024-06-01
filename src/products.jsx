@@ -1,33 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import PriceFilter from './pricefilter';
 import Search from './Searchbar';
-import { FaInstagram } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
+import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, removeItemFromCart } from './redux/actions';
 import Footer from './Footer';
 
 const ProductModal = ({ product, onClose }) => {
-
   if (!product) return null;
 
-  
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center   bg-black bg-opacity-50">
-      <div className="bg-white p-4 rounded-lg max-w-md w-full relative">
-        <button onClick={onClose} className="absolute top-2 right-2 text-black">Close</button>
-        <img className="w-full mb-2 h-60" src={product.image} alt={product.title} />
-        <h3 className="text-lg font-bold mb-2">{product.title}</h3>
-        <p className="text-md mb-2">{product.description}</p>
-        <p className="text-md font-bold mb-2">Price: ${product.price}</p>
-
-       
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg max-w-lg w-full relative shadow-lg">
+        <button onClick={onClose} className="absolute top-3 right-3 text-gray-600 hover:text-gray-800">✖</button>
+        <img className="w-full h-64 object-cover mb-4 rounded-lg" src={product.image} alt={product.title} />
+        <h3 className="text-2xl font-bold mb-3">{product.title}</h3>
+        <p className="text-gray-700 mb-4">{product.description}</p>
+        <p className="text-xl font-semibold mb-4">Price: ${product.price}</p>
       </div>
     </div>
   );
 };
+
 function Product() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -37,7 +31,6 @@ function Product() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
 
   const cart = useSelector(state => state.cart);
   const dispatch = useDispatch();
@@ -87,7 +80,7 @@ function Product() {
   }, []);
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory((prevCategory) => prevCategory === category ? null : category);
+    setSelectedCategory(prevCategory => prevCategory === category ? null : category);
   };
 
   const handleSearch = (title) => {
@@ -115,91 +108,73 @@ function Product() {
 
   const handleAddToCart = (product) => {
     dispatch(addItemToCart(product));
-  }
+  };
 
   const handleRemoveFromCart = (productId) => {
     dispatch(removeItemFromCart(productId));
-  }
-
+  };
 
   return (
-    <div className="min-h-screen flex flex-col mt-16">
-      <nav className=" ">
-              <h1 className="text-lg  font-bold text-center h-10 py-1 bg-blue-700 mb-4">Categories</h1>
-              <div className='flex'>
-                {categories.map((category, index) => (
-                  <div key={index} className="w-full ml-16 ">
-                    <div className=" ">
-                      <p
-                        className={category === selectedCategory ?
-                          "text-lg font-bold cursor-pointer border bg-[#1a2259] rounded-lg text-center text-white "
-                          : "text-lg font-bold mb-2 cursor-pointer"
-                        }
-                        onClick={() => handleCategoryClick(category)}
-                      >
-                        {category}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </nav>
-      <div className="mt-4">
-      <PriceFilter onFilter={handlePriceFilter} /> 
-        <div className=" mt-4 gap-4 flex ml-14">
-         
-       <Search onSearch={handleSearch} />
-        <a href="#" className="text-blue-900 py-2 ml-90 text-4xl">
-                  <FaGithub />
-                </a>
-                <a href="#" className="text-blue-900 py-2  text-4xl">
-                  <FaInstagram />
-                </a>
-                <a href="www.linkedin.com/injyoti-pathak-5648712a6" className="text-blue-900 py-2  text-4xl ">
-                  <FaLinkedin />
-                </a>
+    <div className="min-h-screen flex flex-col mt-20">
+      <nav className="bg-blue-700 text-white py-2">
+        <div className="container mx-auto flex flex-wrap gap-4 justify-center md:justify-start overflow-x-auto p-2 space-x-4">
+          {categories.map((category, index) => (
+            <div key={index} className="flex-shrink-0">
+              <p
+                className={`text-lg font-semibold cursor-pointer px-4 py-2 rounded-lg transition-colors ${
+                  category === selectedCategory ? 'bg-[#1a2259] text-white' : 'bg-white text-blue-700 hover:bg-blue-200'
+                }`}
+                onClick={() => handleCategoryClick(category)}
+              >
+                {category}
+              </p>
+            </div>
+          ))}
         </div>
-        
-        <div className="flex- grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 lg:pr-0 mx-10">
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : (
-            filteredProducts.map((product) => (
-              <div key={product.id} className="w-full">
-                <div className="border bg-[#dae0e5] text-white rounded-lg p-4">
-                  <img
-                    className="w-full mb-2 bg-[#e8ecef] h-60 cursor-pointer"
-                    src={product.image}
-                    alt={product.title}
-                    onClick={() => handleImageClick(product)}
-                  />
-                  <h3 className="text-sm font-cambria text-black mb-2">{product.title}</h3>
-                  <p className="text-md font-bold text-black mb-2">
-                    Price: ${product.price}
-                  
-                    {
-                      product.id in cart ?
-                        <button className="hover:bg-black bg-[#181443] text-white font-serif py-1 px-2 ml-2 mt-4 rounded-xl" onClick={() => handleRemoveFromCart(product.id)}>
-                          Remove Item
-                        </button>
-                        :
-                        <button className="hover:bg-black bg-[#12163c] text-white font-serif py-1 px-2 ml-2 mt-4 rounded-xl" onClick={() => handleAddToCart(product)}>
-                          Add to Cart
-                        </button>
-
-                    }
-                  </p>
-                </div>
+      </nav>
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between mt-4 px-4">
+        <PriceFilter onFilter={handlePriceFilter} />
+        <Search onSearch={handleSearch} />
+      
+      </div>
+      <div className="flex flex-wrap justify-center mt-6 gap-6 px-4">
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          filteredProducts.map((product) => (
+            <div key={product.id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2">
+              <div className="bg-white border rounded-lg shadow-lg p-4 flex flex-col items-center">
+                <img
+                  className="w-full h-60 object-cover mb-4 rounded cursor-pointer"
+                  src={product.image}
+                  alt={product.title}
+                  onClick={() => handleImageClick(product)}
+                />
+                <h3 className="text-md font-bold text-gray-800 mb-2">{product.title}</h3>
+                <p className="text-lg font-semibold text-gray-900 mb-4">Price: ${product.price}</p>
+                {product.id in cart ? (
+                  <button
+                    className="bg-blue-900 text-white px-4 py-1 rounded-lg hover:bg-blue-900 transition"
+                    onClick={() => handleRemoveFromCart(product.id)}
+                  >
+                    Remove Item
+                  </button>
+                ) : (
+                  <button
+                    className="bg-blue-500 text-white px-4 py-1 rounded-lg hover:bg-blue-600 transition"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
+                )}
               </div>
-            ))
-          )}
-        </div>
+            </div>
+          ))
+        )}
       </div>
       {error && <p className="text-red-500 text-center">{error}</p>}
       {isModalOpen && <ProductModal product={selectedProduct} onClose={handleCloseModal} />}
-      <div className='mx-10'>
-      <Footer />
-      </div>
+      <Footer className="mt-auto" />
     </div>
   );
 }
