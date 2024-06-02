@@ -88,7 +88,7 @@ const SignUp = () => {
               navigate("/"); // Navigate to home or any other route
             }
           } else {
-            Toast.error("No sign-in method available for this email.");
+            Toast.error("you already used another method for sign-in .");
           }
         } catch (linkError) {
           Toast.error(`Error linking GitHub with existing account: ${linkError.message}`);

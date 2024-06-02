@@ -10,7 +10,7 @@ import {
   EmailAuthProvider,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { auth } from "../../firebase"; 
+import { auth } from "../../firebase";
 import { login } from "../redux/actions";
 
 const Login = () => {
@@ -33,12 +33,9 @@ const Login = () => {
         formData.password
       );
 
-      console.log("User Credential:", userCredential); // Log user credentials
-
       // Extract user and token
       const user = userCredential.user;
       const token = await user.getIdToken();
-      console.log(user);
 
       // Dispatch the login action with the token
       dispatch(login(token));
@@ -61,7 +58,6 @@ const Login = () => {
 
       // Extract user token
       const token = await user.getIdToken();
-      console.log(user);
 
       // Dispatch the login action with the token
       dispatch(login(token));
@@ -70,8 +66,8 @@ const Login = () => {
       navigate("/");
       Toast.success("User logged in with Google successfully");
     } catch (error) {
-      console.error("Google Login Error", error);
       Toast.error(`Error in logging in with Google: ${error.message}`);
+      console.error("Google Login Error", error);
     }
   };
 
@@ -84,7 +80,6 @@ const Login = () => {
 
       // Extract user token
       const token = await user.getIdToken();
-      console.log(user);
 
       // Dispatch the login action with the token
       dispatch(login(token));
@@ -160,7 +155,6 @@ const Login = () => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center mt-16 bg-gray-100 p-4">
