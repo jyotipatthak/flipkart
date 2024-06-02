@@ -54,7 +54,7 @@ const Navbar = () => {
               </button>
             ) : (
               <Link
-                to="/signup"
+                to="/login"
                 className="py-2 px-4 text-md text-blue-950 hover:bg-blue-700 hover:text-white rounded flex items-center gap-2"
               >
                 <img

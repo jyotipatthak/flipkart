@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
@@ -12,15 +10,15 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { auth } from "../../firebase"; // Import the initialized auth
+import { auth } from "../../firebase";
 import Toast from "../ui/Toast";
+import { login } from "../redux/actions"; // Import the login action
 
 const SignUp = () => {
   const googleProvider = new GoogleAuthProvider();
   const githubProvider = new GithubAuthProvider();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -34,35 +32,13 @@ const SignUp = () => {
         formData.email,
         formData.password
       );
-
-      // Signed up
       const user = userCredential.user;
       const token = await user.getIdToken();
-      console.log(user);
-
-      toast.success("User registered successfully", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-
-      navigate("/Login");
+      dispatch(login(token)); // Dispatch login action with token
+      Toast.success("User registered successfully");
+      navigate("/"); // Navigate to home or any other route
     } catch (error) {
-      toast.error(`Error in registering the user: ${error.message}`, {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      Toast.error(`Error in registering the user: ${error.message}`);
     }
   };
 
@@ -71,31 +47,11 @@ const SignUp = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       const token = await user.getIdToken();
-      console.log(user);
-
-      toast.success("User signed up with Google successfully", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-
-      navigate("/Login");
+      dispatch(login(token)); // Dispatch login action with token
+      Toast.success("User signed up with Google successfully");
+      navigate("/"); // Navigate to home or any other route
     } catch (error) {
-      toast.error(`Error up signing in with Google: ${error.message}`, {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      Toast.error(`Error signing in with Google: ${error.message}`);
     }
   };
 
@@ -104,96 +60,41 @@ const SignUp = () => {
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
       const token = await user.getIdToken();
-      console.log(user);
-
-      toast.success("User signed up with GitHub successfully", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
-
-      navigate("/Login");
+      dispatch(login(token)); // Dispatch login action with token
+      Toast.success("User signed up with GitHub successfully");
+      navigate("/"); // Navigate to home or any other route
     } catch (error) {
       if (error.code === "auth/account-exists-with-different-credential") {
         const existingEmail = error.customData.email;
         const pendingCred = GithubAuthProvider.credentialFromError(error);
-
-        const providers = await fetchSignInMethodsForEmail(auth, existingEmail);
-        if (
-          providers.includes(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)
-        ) {
-          const password = prompt(
-            "An account already exists with this email. Please enter your password to link GitHub with your existing account."
-          );
-          try {
-            const userCredential = await signInWithEmailAndPassword(
-              auth,
-              existingEmail,
-              password
-            );
-            await userCredential.user.linkWithCredential(pendingCred);
-            const token = await userCredential.user.getIdToken();
-            dispatch(login(token));
-            navigate("/Login");
-            toast.success(
-              "User signed up with GitHub and linked with existing account successfully",
-              {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-              }
-            );
-          } catch (linkError) {
-            toast.error(
-              `Error linking GitHub with existing account: ${linkError.message}`,
-              {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-              }
-            );
-          }
-        } else {
-          toast.error(
-            "An account already exists with a different sign-in method. Please use the existing method to sign in.",
-            {
-              position: "bottom-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
+        try {
+          // Fetch the sign-in methods for the existing email
+          const providers = await fetchSignInMethodsForEmail(auth, existingEmail);
+          if (providers.length > 0) {
+            // Sign in with the first available provider
+            let signInResult;
+            if (providers.includes(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+              const password = prompt("An account already exists with this email. Please enter your password to link GitHub with your existing account.");
+              signInResult = await signInWithEmailAndPassword(auth, existingEmail, password);
+            } else if (providers.includes(GoogleAuthProvider.PROVIDER_ID)) {
+              signInResult = await signInWithPopup(auth, googleProvider);
             }
-          );
+            // Link the GitHub credential with the existing account
+            if (signInResult) {
+              await signInResult.user.linkWithCredential(pendingCred);
+              const token = await signInResult.user.getIdToken();
+              dispatch(login(token)); // Dispatch login action with token
+              Toast.success("GitHub account linked successfully with the existing account");
+              navigate("/"); // Navigate to home or any other route
+            }
+          } else {
+            Toast.error("No sign-in method available for this email.");
+          }
+        } catch (linkError) {
+          Toast.error(`Error linking GitHub with existing account: ${linkError.message}`);
         }
       } else {
-        toast.error(`Error in signing in with GitHub: ${error.message}`, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        Toast.error(`Error signing in with GitHub: ${error.message}`);
       }
     }
   };
