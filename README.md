@@ -81,9 +81,9 @@ Cart Management: Users can view and manage the items in their cart before making
 
 **Link of gitgub page** : https://github.com/jyotipatthak/flipkart
 
-**Link to wish web app video**: https://youtu.be/MKEkv8dHDyA?si=jMhwehTvKdMSc9ms
+**Link of flipkart  app video**: https://youtu.be/MKEkv8dHDyA?si=jMhwehTvKdMSc9ms
 
-**Web Deployed Link**: https://flipkart-eight-eta.vercel.app/ 
+**Web Deployed Link**: https://flipkart-eight-eta.vercel.app
 
 
 

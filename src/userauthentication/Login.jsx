@@ -188,10 +188,10 @@ const Login = () => {
               CONTINUE
             </button>
           </form>
-          <div className="mt-4 text-center">
+          <div className="mt-4 text-center flex">
             <button
               onClick={handleGoogleLogin}
-              className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-blue-600 flex items-center justify-center"
+              className="w-full   hover:bg-gray-900 hover:text-white text-black font-bold py-2 px-4 rounded mt-2  flex items-center justify-center"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
                 <path
@@ -211,11 +211,11 @@ const Login = () => {
                   d="M24 48c6.5 0 12-2.1 16.1-5.7l-7.5-5.8c-2.1 1.4-4.8 2.2-7.6 2.2-6.5 0-12-4.4-13.9-10.4l-7.5 5.8C6.8 42.2 14.7 48 24 48z"
                 />
               </svg>
-              Continue with Google
+              Google
             </button>
             <button
               onClick={handleGithubLogin}
-              className="w-full bg-gray-800 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-gray-900 flex items-center justify-center"
+              className="w-full   hover:bg-gray-900 hover:text-white text-black font-bold py-2 px-4 rounded mt-2  flex items-center justify-center"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -224,7 +224,7 @@ const Login = () => {
               >
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.112.82-.262.82-.58v-2.157c-3.338.725-4.04-1.415-4.04-1.415-.546-1.387-1.334-1.757-1.334-1.757-1.088-.744.083-.729.083-.729 1.203.084 1.836 1.235 1.836 1.235 1.07 1.833 2.806 1.303 3.492.995.108-.774.42-1.304.763-1.604-2.665-.305-5.467-1.333-5.467-5.932 0-1.31.468-2.38 1.236-3.22-.124-.304-.536-1.526.116-3.176 0 0 1.008-.322 3.302 1.23.96-.267 1.98-.4 3-.404 1.02.004 2.04.137 3 .404 2.294-1.552 3.3-1.23 3.3-1.23.652 1.65.24 2.872.12 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.805 5.625-5.475 5.922.432.372.816 1.104.816 2.226v3.293c0 .32.216.694.825.576C20.565 21.795 24 17.295 24 12 24 5.37 18.63 0 12 0z" />
               </svg>
-              Continue with GitHub
+              Github
             </button>
           </div>
           <hr className="my-4" />

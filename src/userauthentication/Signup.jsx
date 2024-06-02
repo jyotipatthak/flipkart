@@ -166,10 +166,10 @@ const SignUp = () => {
               CONTINUE
             </button>
           </form>
-          <div className="mt-4 text-center">
+          <div className="mt-4 text-center flex">
             <button
               onClick={handleGoogleSignIn}
-              className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-blue-600 flex items-center justify-center"
+              className="w-full hover:bg-gray-900 hover:text-white text-black font-bold py-2 px-4 rounded mt-2  flex items-center justify-center"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
                 <path
@@ -189,11 +189,11 @@ const SignUp = () => {
                   d="M24 48c6.5 0 12-2.1 16.1-5.7l-7.5-5.8c-2.1 1.4-4.8 2.3-7.7 2.3-6.2 0-11.5-4.2-13.4-10l-7.5 5.8C6.8 42.2 14.7 48 24 48z"
                 />
               </svg>
-              Sign up with Google
+               Google
             </button>
             <button
               onClick={handleGithubSignIn}
-              className="w-full bg-gray-900 text-white font-bold py-2 px-4 rounded mt-2 hover:bg-gray-800 flex items-center justify-center"
+              className="w-full hover:bg-gray-900 text-black font-bold py-2 px-4 rounded mt-2 hover:text-white flex items-center justify-center"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                 <path
@@ -201,13 +201,16 @@ const SignUp = () => {
                   d="M12 0C5.37 0 0 5.373 0 12c0 5.304 3.438 9.8 8.205 11.385.6.111.82-.261.82-.579 0-.285-.011-1.04-.017-2.04-3.338.724-4.042-1.614-4.042-1.614C4.422 17.544 3.633 17.2 3.633 17.2c-1.087-.744.082-.729.082-.729 1.202.084 1.836 1.235 1.836 1.235 1.07 1.832 2.807 1.303 3.492.997.108-.775.419-1.303.762-1.602-2.665-.302-5.467-1.334-5.467-5.931 0-1.31.469-2.381 1.236-3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23.957-.267 1.984-.4 3.004-.404 1.02.004 2.047.137 3.004.404 2.291-1.553 3.297-1.23 3.297-1.23.653 1.653.242 2.873.118 3.176.77.84 1.236 1.911 1.236 3.221 0 4.609-2.805 5.625-5.475 5.922.43.371.814 1.102.814 2.222 0 1.606-.015 2.896-.015 3.291 0 .321.217.694.825.576C20.565 21.796 24 17.302 24 12c0-6.627-5.373-12-12-12z"
                 />
               </svg>
-              Sign up with GitHub
+               GitHub
             </button>
+            </div>
             <hr className="my-4" />
+            <div className="text-center" >
+           
             <Link to="/login" className="text-blue-500">
               Existing User? Log in
             </Link>
-          </div>
+            </div>
         </div>
       </div>
     </div>
