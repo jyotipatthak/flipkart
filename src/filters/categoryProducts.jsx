@@ -62,14 +62,14 @@ const CategoryProducts = ({ category }) => {
         <div className="flex gap-2 items-center">
           <button 
             onClick={handlePrevProduct} 
-            className={`text-lg sm:text-3xl   rounded-lg font-bold border-2 border-blue-700 px-2  ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={` sm:text-3xl   font-bold border-2 rounded-full border-blue-700 px-2 pb-1  ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={currentIndex === 0}
           >
             &lt;
           </button>
           <button 
             onClick={handleNextProduct} 
-            className={`text-lg sm:text-3xl font-bold rounded-lg  border-2 border-blue-700  px-2 ${currentIndex + 4 >= products.length ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`sm:text-3xl font-bold rounded-full  border-2 pb-1 border-blue-700 px-2 ${currentIndex + 4 >= products.length ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={currentIndex + 4 >= products.length}
           >
             &gt;
