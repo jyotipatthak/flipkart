@@ -5,22 +5,8 @@ import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart,removeItemFromCart } from '../redux/actions';
 import Footer from '../ui/Footer';
+import ProductModal from '../filters/ProductModal';
 
-const ProductModal = ({ product, onClose }) => {
-  if (!product) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg max-w-lg w-full relative shadow-lg">
-        <button onClick={onClose} className="absolute top-3 right-3 text-gray-600 hover:text-gray-800">✖</button>
-        <img className="w-full h-64 object-cover mb-4 rounded-lg" src={product.image} alt={product.title} />
-        <h3 className="text-2xl font-bold mb-3">{product.title}</h3>
-        <p className="text-gray-700 mb-4">{product.description}</p>
-        <p className="text-xl font-semibold mb-4">Price: ${product.price}</p>
-      </div>
-    </div>
-  );
-};
 
 function Product() {
   const [products, setProducts] = useState([]);

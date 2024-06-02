@@ -24,6 +24,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
 
+  // Function to handle email/password login
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -32,9 +33,9 @@ const Login = () => {
         formData.password
       );
 
-      console.log("User Credential:", userCredential); // Add this line to check userCredential
+      console.log("User Credential:", userCredential); // Log user credentials
 
-      // Logged in
+      // Extract user and token
       const user = userCredential.user;
       const token = await user.getIdToken();
       console.log(user);
@@ -42,6 +43,7 @@ const Login = () => {
       // Dispatch the login action with the token
       dispatch(login(token));
 
+      // Navigate to home page
       navigate("/");
       Toast.success("User logged in successfully");
     } catch (error) {
@@ -50,8 +52,17 @@ const Login = () => {
     }
   };
 
+  // Function to handle Google login
   const handleGoogleLogin = async () => {
     try {
+      // Check if account exists for the given email
+      const methods = await fetchSignInMethodsForEmail(auth, formData.email);
+      if (methods.length === 0) {
+        Toast.error("No account found with this email. Please sign up first.");
+        return;
+      }
+
+      // Sign in with Google
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       const token = await user.getIdToken();
@@ -60,6 +71,7 @@ const Login = () => {
       // Dispatch the login action with the token
       dispatch(login(token));
 
+      // Navigate to home page
       navigate("/");
       Toast.success("User logged in with Google successfully");
     } catch (error) {
@@ -68,8 +80,17 @@ const Login = () => {
     }
   };
 
+  // Function to handle GitHub login
   const handleGithubLogin = async () => {
     try {
+      // Check if account exists for the given email
+      const methods = await fetchSignInMethodsForEmail(auth, formData.email);
+      if (methods.length === 0) {
+        Toast.error("No account found with this email. Please sign up first.");
+        return;
+      }
+
+      // Sign in with GitHub
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
       const token = await user.getIdToken();
@@ -78,6 +99,7 @@ const Login = () => {
       // Dispatch the login action with the token
       dispatch(login(token));
 
+      // Navigate to home page
       navigate("/");
       Toast.success("User logged in with GitHub successfully");
     } catch (error) {
@@ -85,6 +107,7 @@ const Login = () => {
         const existingEmail = error.customData.email;
         const pendingCred = GithubAuthProvider.credentialFromError(error);
 
+        // Check if the existing account uses email/password sign-in method
         const providers = await fetchSignInMethodsForEmail(auth, existingEmail);
         if (providers.includes(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
           const password = prompt(
@@ -121,15 +144,18 @@ const Login = () => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     handleLogin();
   };
 
+  // Handle input changes
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center mt-16 bg-gray-100 p-4">
@@ -191,7 +217,7 @@ const Login = () => {
           <div className="mt-4 text-center flex">
             <button
               onClick={handleGoogleLogin}
-              className="w-full   hover:bg-gray-900 hover:text-white text-black font-bold py-2 px-4 rounded mt-2  flex items-center justify-center"
+              className="w-full hover:bg-gray-900 hover:text-white text-black font-bold py-2 px-4 rounded mt-2 flex items-center justify-center"
             >
               <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
                 <path
@@ -215,7 +241,7 @@ const Login = () => {
             </button>
             <button
               onClick={handleGithubLogin}
-              className="w-full   hover:bg-gray-900 hover:text-white text-black font-bold py-2 px-4 rounded mt-2  flex items-center justify-center"
+              className="w-full hover:bg-gray-900 hover:text-white text-black font-bold py-2 px-4 rounded mt-2 flex items-center justify-center"
             >
               <svg
                 className="w-5 h-5 mr-2"

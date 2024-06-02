@@ -1,27 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart,removeItemFromCart } from "../redux/actions";
-
-const ProductModal = ({ product, onClose }) => {
-  if (!product) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-4 rounded-lg max-w-md w-full relative">
-        <button onClick={onClose} className="absolute top-2 right-2 text-black">
-          Close
-        </button>
-        <img
-          className="w-full mb-4 h-60 object-cover rounded-lg"
-          src={product.image}
-          alt={product.title}
-        />
-        <h3 className="text-lg font-bold mb-2">{product.title}</h3>
-        <p className="text-md font-bold mb-2">Price: ${product.price}</p>
-      </div>
-    </div>
-  );
-};
+import { addItemToCart, removeItemFromCart } from "../redux/actions";
+import ProductModal from "../filters/ProductModal";
 
 function Trending() {
   const [products, setProducts] = useState([]);
@@ -43,11 +23,9 @@ function Trending() {
       })
       .then((json) => {
         setProducts(json);
-        setLoading(false);
       })
       .catch((err) => {
-        setError(err);
-        setLoading(false);
+        console.error("Failed to fetch products:", err);
       });
   }, []);
 
@@ -69,6 +47,9 @@ function Trending() {
     dispatch(removeItemFromCart(productId));
   };
 
+  // Convert cart object to an array of values
+  const cartItems = Object.values(cart);
+
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-3xl font-bold text-left p-2 text-green-900 underline mb-6">
@@ -88,7 +69,7 @@ function Trending() {
                 <h2 className="text-md font-semibold mb-2">{product.title}</h2>
                 <div className="flex justify-between items-center mt-auto">
                   <p className="text-xl font-semibold">${product.price}</p>
-                  {product.id in cart ? (
+                  {cartItems.some(item => item.product.id === product.id) ? (
                     <button
                       className="hover:bg-red-600 bg-red-500 text-white font-semibold py-1 px-4 rounded-lg transition-colors duration-300"
                       onClick={() => handleRemoveFromCart(product.id)}
