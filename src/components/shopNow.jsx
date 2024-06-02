@@ -11,6 +11,7 @@ function Trending() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
+  // Fetch trending products on component mount
   useEffect(() => {
     fetch(
       "https://fakestoreapi.com/products/category/women%27s%20clothing?limit=4"
@@ -29,20 +30,24 @@ function Trending() {
       });
   }, []);
 
+  // Handler for opening product modal
   const handleImageClick = (product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
 
+  // Handler for closing product modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
 
+  // Handler for adding product to cart
   const handleAddToCart = (product) => {
     dispatch(addItemToCart(product));
   };
 
+  // Handler for removing product from cart
   const handleRemoveFromCart = (productId) => {
     dispatch(removeItemFromCart(productId));
   };

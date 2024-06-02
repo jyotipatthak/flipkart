@@ -10,7 +10,7 @@ import {
   EmailAuthProvider,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { auth } from "../../firebase"; // Import the initialized auth
+import { auth } from "../../firebase"; 
 import { login } from "../redux/actions";
 
 const Login = () => {
@@ -55,16 +55,11 @@ const Login = () => {
   // Function to handle Google login
   const handleGoogleLogin = async () => {
     try {
-      // Check if account exists for the given email
-      const methods = await fetchSignInMethodsForEmail(auth, formData.email);
-      if (methods.length === 0) {
-        Toast.error("No account found with this email. Please sign up first.");
-        return;
-      }
-
       // Sign in with Google
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
+
+      // Extract user token
       const token = await user.getIdToken();
       console.log(user);
 
@@ -83,16 +78,11 @@ const Login = () => {
   // Function to handle GitHub login
   const handleGithubLogin = async () => {
     try {
-      // Check if account exists for the given email
-      const methods = await fetchSignInMethodsForEmail(auth, formData.email);
-      if (methods.length === 0) {
-        Toast.error("No account found with this email. Please sign up first.");
-        return;
-      }
-
       // Sign in with GitHub
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
+
+      // Extract user token
       const token = await user.getIdToken();
       console.log(user);
 
@@ -104,40 +94,55 @@ const Login = () => {
       Toast.success("User logged in with GitHub successfully");
     } catch (error) {
       if (error.code === "auth/account-exists-with-different-credential") {
-        const existingEmail = error.customData.email;
-        const pendingCred = GithubAuthProvider.credentialFromError(error);
+        // Handle account exists with different credential
+        const existingEmail = error.email;
+        const pendingCred = error.credential;
 
         // Check if the existing account uses email/password sign-in method
         const providers = await fetchSignInMethodsForEmail(auth, existingEmail);
         if (providers.includes(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+          // Prompt for password to link accounts
           const password = prompt(
             "Please enter your password to link GitHub with your existing account"
           );
           if (password) {
             try {
+              // Sign in with email/password
               const userCredential = await signInWithEmailAndPassword(
                 auth,
                 existingEmail,
                 password
               );
+              // Link GitHub credential with the existing account
               await userCredential.user.linkWithCredential(pendingCred);
+              // Extract user token
               const token = await userCredential.user.getIdToken();
+              // Dispatch the login action with the token
               dispatch(login(token));
+              // Navigate to home page
               navigate("/");
               Toast.success(
                 "User logged in with GitHub and linked with existing account successfully"
               );
+              return;
             } catch (linkError) {
+              // Handle linking accounts error
               Toast.error(`Error linking accounts: ${linkError.message}`);
               console.error("Error linking accounts", linkError);
+              return;
             }
           } else {
+            // Handle missing password
             Toast.error("Password is required to link accounts");
+            return;
           }
         } else {
+          // Handle email already associated with another provider
           Toast.error("Email is already associated with another provider");
+          return;
         }
       } else {
+        // Handle other GitHub login errors
         Toast.error(`Error in logging in with GitHub: ${error.message}`);
         console.error("Error logging in with GitHub", error);
       }

@@ -1,10 +1,8 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyAha03VAXgmiCUFR3HEdVFdF1pedn4UR_4",
     authDomain: "flipkart-e8aba.firebaseapp.com",
@@ -15,8 +13,8 @@ const firebaseConfig = {
     measurementId: "G-VWZ3JF5YC1"
 };
 
-// Initialize Firebase
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const auth = getAuth(app);   // Get authentication instance
 
 export {auth}

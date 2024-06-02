@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 const CategoryMenu = () => {
-  const [categories, setCategories] = useState([]);
-  const [openCategory, setOpenCategory] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  // State variables
+  const [categories, setCategories] = useState([]); // Store categories
+  const [openCategory, setOpenCategory] = useState(null); // Store index of opened category
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // Detect mobile view
 
+  // Hardcoded items for each category
   const items = {
     "electronics": ['Laptop', 'Smartphone', 'Headphones'],
     "jewelery": ['Necklace', 'Earrings', 'Bracelet'],
@@ -14,6 +16,7 @@ const CategoryMenu = () => {
     "women's clothing": ['Dress', 'Skirt', 'Blouse']
   };
 
+  // Hardcoded category logos
   const categoryLogos = {
     "electronics": "th.jpg",
     "jewelery": "jwellery.png",
@@ -21,6 +24,7 @@ const CategoryMenu = () => {
     "women's clothing": "women.jpg"
   };
 
+  // Fetch categories from API and handle window resize
   useEffect(() => {
     fetch('https://fakestoreapi.com/products/categories')
       .then(res => {
@@ -49,13 +53,16 @@ const CategoryMenu = () => {
     };
   }, []);
 
+  // Loading and error handling
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
+  // Render category menu
   return (
     <div className="flex justify-around  sm:mt-20 lg:mt-16 p-2">
       {categories.map((category, index) => (
         <div key={index} className="relative">
+          {/* Button to toggle category dropdown */}
           <button
             onClick={() => setOpenCategory(openCategory === index ? null : index)}
             className="flex flex-col items-center p-2 hover:bg-gray-200 rounded"
@@ -63,6 +70,7 @@ const CategoryMenu = () => {
             <img src={categoryLogos[category]} alt={category} className="w-20 h-20 mb-1" />
             <span>{category}</span>
           </button>
+          {/* Dropdown for each category */}
           {openCategory === index && (
             <div
               className={`absolute top-full mt-2 p-2 bg-white border rounded shadow-lg ${isMobile ? 'w-full' : 'w-40'}`}
