@@ -8,10 +8,12 @@ function Cart() {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
+  // Remove item from cart
   const handleRemoveFromCart = (productId) => {
     dispatch(removeItemFromCart(productId));
   };
 
+  // Update item quantity in cart
   const handleUpdateQuantityCart = (productId, quantity) => {
     dispatch(updateItemQuantityInCart(productId, quantity));
   };
@@ -23,22 +25,30 @@ function Cart() {
 
   return (
     <div className="bg-gray-50 text-gray-800 min-h-screen p-8 sm:p-12  xl:p-20">
+      {/* Cart title */}
       <h2 className="text-4xl font-extrabold mb-12 text-center text-gray-900  sm:mt-12 ">Shopping Cart</h2>
+      {/* Cart items grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {/* Iterate over cart items */}
         {Object.values(cart).map((item) => {
           let product = item.product;
           return (
             <div key={product.id} className="border rounded-lg flex flex-col p-6 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+              {/* Product image */}
               <img
                 className="w-full h-40 object-cover mb-4 rounded-lg cursor-pointer hover:opacity-90 transition-opacity duration-300"
                 src={product.image}
                 alt={product.title}
                 onClick={() => handleImageClick(product)}
               />
+              {/* Product title */}
               <h3 className="text-lg font-semibold mb-2 text-gray-900">{product.title}</h3>
+              {/* Product price */}
               <p className="text-xl font-bold mb-4 text-indigo-600">${product.price}</p>
+              {/* Quantity control */}
               {product.id in cart ? (
                 <div className="flex items-center space-x-2">
+                  {/* Remove item button */}
                   {cart[product.id].quantity === 1 ? (
                     <button
                       onClick={() => handleRemoveFromCart(product.id)}
@@ -47,6 +57,7 @@ function Cart() {
                       <FaTrash className="text-white" />
                     </button>
                   ) : (
+                    // Decrease quantity button
                     <button
                       onClick={() =>
                         handleUpdateQuantityCart(
@@ -60,6 +71,7 @@ function Cart() {
                     </button>
                   )}
 
+                  {/* Quantity input */}
                   <input
                     id="quantity-input"
                     type="number"
@@ -71,6 +83,7 @@ function Cart() {
                     className="text-center border border-gray-300 rounded py-2 px-4 w-16"
                   />
 
+                  {/* Increase quantity button */}
                   <button
                     onClick={() =>
                       handleUpdateQuantityCart(
@@ -90,6 +103,7 @@ function Cart() {
           );
         })}
       </div>
+      {/* Total price and checkout button */}
       <div className="mt-12 text-center">
         <p className="text-2xl font-bold mb-4">Total: ${totalPrice.toFixed(2)}</p>
         <Link to="/signup">

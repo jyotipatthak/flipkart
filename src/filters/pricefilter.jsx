@@ -28,8 +28,8 @@ const PriceFilter = ({ onFilter }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center px-4 py-2 bg-blue-950 text-white gap-4 rounded-xl shadow-lg w-full md:w-auto mx-4 md:mx-0">
-      <h2 className="text-xl text-center md:text-left p-2 font-semibold">Filter by Price</h2>
+    <div className="flex flex-col md:flex-row items-center px-4 p-2 bg-blue-950 text-white gap-4 rounded-xl shadow-lg w-full md:w-auto mx-4 md:mx-0">
+      <h2 className="text-lg text-center md:text-left  font-semibold"> Price</h2>
       <div className="w-full md:w-96 flex flex-col items-center">
         <Slider
           range
@@ -48,12 +48,12 @@ const PriceFilter = ({ onFilter }) => {
       </div>
       <div className="flex flex-col md:flex-row items-center mt-4 md:mt-0 space-y-2 md:space-y-0 md:space-x-4">
         <div className="flex gap-2 items-center">
-          <label htmlFor="min-price" className="mr-2">Min Price:</label>
+         
           <select
             id="min-price"
             value={minPrice}
             onChange={handleMinPriceChange}
-            className="p-2 rounded-md text-black"
+            className=" rounded-md text-black"
           >
             {[0, 50, 100, 200, 300, 500, 700, 1000].map((value) => (
               <option key={value} value={value}>
@@ -62,13 +62,14 @@ const PriceFilter = ({ onFilter }) => {
             ))}
           </select>
         </div>
+        
         <div className="flex gap-2 items-center">
-          <label htmlFor="max-price" className="mr-2">Max Price:</label>
+         
           <select
             id="max-price"
             value={maxPrice}
             onChange={handleMaxPriceChange}
-            className="p-2 rounded-md text-black"
+            className=" rounded-md text-black"
           >
             {[50, 100, 200, 300, 500, 700, 1000].map((value) => (
               <option key={value} value={value}>
@@ -79,7 +80,7 @@ const PriceFilter = ({ onFilter }) => {
         </div>
         <button
           onClick={handleApplyFilter}
-          className="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-md"
+          className="bg-blue-700 hover:bg-blue-800 text-white p-1 rounded-md"
         >
           Apply
         </button>

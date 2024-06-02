@@ -88,7 +88,7 @@ Cart Management: Users can view and manage the items in their cart before making
 
 
 ## 🎋 `COLLABORATORS`
-This project is created within a team of two members.
+This project is created by :
 - [@jyoti pathak](https://github.com/jyotipatthak)
 
 ##  📚`Feedback`

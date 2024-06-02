@@ -115,27 +115,34 @@ function Product() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col mt-20">
-      <nav className="bg-blue-700 text-white py-2">
-        <div className="flex justify-center overflow-x-auto p-2 space-x-4">
-          {categories.map((category, index) => (
-            <div key={index} className="flex-shrink-0">
-              <p
-                className={`text-lg font-semibold cursor-pointer px-4  rounded-lg transition-colors ${
-                  category === selectedCategory ? 'bg-[#1a2259] text-white' : 'bg-white text-blue-700 hover:bg-blue-200'
-                }`}
-                onClick={() => handleCategoryClick(category)}
-              >
-                {category}
-              </p>
-            </div>
-          ))}
+    <div className="min-h-screen flex flex-col  mt-20">
+     <nav className="bg-blue-700 text-white py-2">
+  <div className="container mx-auto flex justify-center md:justify-center">
+    <div className="flex gap-4 overflow-x-auto p-1 md:p-0">
+      {categories.map((category, index) => (
+        <div key={index} className="flex-shrink-0">
+          <p
+            className={`text-lg  cursor-pointer px-4 rounded-lg transition-colors ${
+              category === selectedCategory ? 'bg-[#1a2259] text-white' : 'bg-white text-blue-700 hover:bg-blue-200'
+            }`}
+            onClick={() => handleCategoryClick(category)}
+          >
+            {category}
+          </p>
         </div>
-      </nav>
+      ))}
+    </div>
+  </div>
+</nav>
+
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between mt-4 px-4">
         <PriceFilter onFilter={handlePriceFilter} />
         <Search onSearch={handleSearch} />
-       
+        <div className="flex ml-4 mt-4 md:mt-0 text-2xl text-blue-900 space-x-4">
+          <a href="https://github.com" className="hover:text-blue-600"><FaGithub /></a>
+          <a href="https://instagram.com" className="hover:text-blue-600"><FaInstagram /></a>
+          <a href="https://linkedin.com" className="hover:text-blue-600"><FaLinkedin /></a>
+        </div>
       </div>
       <div className="flex flex-wrap justify-center mt-6 gap-6 px-4">
         {isLoading ? (
